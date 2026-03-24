@@ -1,0 +1,20 @@
+{
+  "id": "example-half-adder",
+  "name": "Half Adder",
+  "components": [
+    { "id": "a", "type": "INPUT", "x": 40, "y": 80, "rotation": 0, "label": "A", "value": false },
+    { "id": "b", "type": "INPUT", "x": 40, "y": 160, "rotation": 0, "label": "B", "value": false },
+    { "id": "xor1", "type": "XOR", "x": 200, "y": 80, "rotation": 0, "label": "XOR1" },
+    { "id": "and1", "type": "AND", "x": 200, "y": 180, "rotation": 0, "label": "AND1" },
+    { "id": "sum", "type": "OUTPUT", "x": 360, "y": 80, "rotation": 0, "label": "Sum" },
+    { "id": "carry", "type": "OUTPUT", "x": 360, "y": 180, "rotation": 0, "label": "Carry" }
+  ],
+  "wires": [
+    { "id": "w1", "from": { "componentId": "a", "pinIndex": 0 }, "to": { "componentId": "xor1", "pinIndex": 0 } },
+    { "id": "w2", "from": { "componentId": "b", "pinIndex": 0 }, "to": { "componentId": "xor1", "pinIndex": 1 } },
+    { "id": "w3", "from": { "componentId": "a", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 0 } },
+    { "id": "w4", "from": { "componentId": "b", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 1 } },
+    { "id": "w5", "from": { "componentId": "xor1", "pinIndex": 0 }, "to": { "componentId": "sum", "pinIndex": 0 } },
+    { "id": "w6", "from": { "componentId": "and1", "pinIndex": 0 }, "to": { "componentId": "carry", "pinIndex": 0 } }
+  ]
+}

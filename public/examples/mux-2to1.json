@@ -1,0 +1,24 @@
+{
+  "id": "example-mux-2to1",
+  "name": "2-to-1 Multiplexer",
+  "components": [
+    { "id": "d0", "type": "INPUT", "x": 40, "y": 60, "rotation": 0, "label": "D0", "value": false },
+    { "id": "d1", "type": "INPUT", "x": 40, "y": 140, "rotation": 0, "label": "D1", "value": false },
+    { "id": "sel", "type": "INPUT", "x": 40, "y": 240, "rotation": 0, "label": "SEL", "value": false },
+    { "id": "not1", "type": "NOT", "x": 180, "y": 240, "rotation": 0, "label": "NOT_SEL" },
+    { "id": "and1", "type": "AND", "x": 320, "y": 80, "rotation": 0, "label": "AND_D0" },
+    { "id": "and2", "type": "AND", "x": 320, "y": 180, "rotation": 0, "label": "AND_D1" },
+    { "id": "or1", "type": "OR", "x": 480, "y": 120, "rotation": 0, "label": "OR1" },
+    { "id": "out", "type": "OUTPUT", "x": 620, "y": 120, "rotation": 0, "label": "Y" }
+  ],
+  "wires": [
+    { "id": "w1", "from": { "componentId": "sel", "pinIndex": 0 }, "to": { "componentId": "not1", "pinIndex": 0 } },
+    { "id": "w2", "from": { "componentId": "d0", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 0 } },
+    { "id": "w3", "from": { "componentId": "not1", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 1 } },
+    { "id": "w4", "from": { "componentId": "d1", "pinIndex": 0 }, "to": { "componentId": "and2", "pinIndex": 0 } },
+    { "id": "w5", "from": { "componentId": "sel", "pinIndex": 0 }, "to": { "componentId": "and2", "pinIndex": 1 } },
+    { "id": "w6", "from": { "componentId": "and1", "pinIndex": 0 }, "to": { "componentId": "or1", "pinIndex": 0 } },
+    { "id": "w7", "from": { "componentId": "and2", "pinIndex": 0 }, "to": { "componentId": "or1", "pinIndex": 1 } },
+    { "id": "w8", "from": { "componentId": "or1", "pinIndex": 0 }, "to": { "componentId": "out", "pinIndex": 0 } }
+  ]
+}

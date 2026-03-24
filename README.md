@@ -1,36 +1,132 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduVision
+
+**AI-powered digital logic education platform.** Learn gates and Boolean algebra through interactive SVG circuit simulations, structured video lessons, and an AI tutor powered by Claude.
+
+## Features
+
+- **Live Circuit Simulator** — drag-and-drop SVG-based circuit editor with real-time signal propagation
+- **Video Lessons** — 8-episode Chapter 1 covering AND, OR, NOT, NAND, NOR, XOR, half adder, full adder
+- **AI Tutor** — ask Claude to build circuits from text, explain designs, or debug issues
+- **Truth Table Generator** — auto-generates truth tables for any circuit in real time
+- **Challenges** — guided exercises with answer validation and confetti on success
+- **Example Circuits** — half adder, full adder, 2-to-1 mux, AND-from-NAND
+- **Auth & Save** — Supabase auth (email + Google), save/load circuits to database
+
+## Tech Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | Next.js 16 + TypeScript + App Router |
+| Styling | Tailwind CSS + shadcn/ui (dark theme) |
+| State | Zustand |
+| Simulator | Client-side SVG + TypeScript propagation engine |
+| AI | Anthropic Claude Sonnet (`@anthropic-ai/sdk`) |
+| Backend | Supabase (Auth + PostgreSQL + RLS) |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A Supabase project (free tier works)
+- An Anthropic API key
+
+### Setup
 
 ```bash
+cd ~/EduVision
+npm install
+cp .env.local.example .env.local
+# Fill in your keys in .env.local
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+ANTHROPIC_API_KEY=sk-ant-your-key
+```
 
-## Learn More
+### Database Setup
 
-To learn more about Next.js, take a look at the following resources:
+Run the migration in your Supabase SQL editor:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Copy contents of supabase/migrations/001_initial.sql
+# Paste into Supabase SQL editor and run
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+app/
+  page.tsx              # Landing page
+  simulator/page.tsx    # Circuit simulator
+  learn/page.tsx        # Episode list
+  learn/[id]/page.tsx   # Episode player
+  challenge/[slug]/     # Challenge page
+  dashboard/page.tsx    # User dashboard
+  login/page.tsx        # Auth page
+  api/ai/               # Claude API routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+components/
+  simulator/            # Canvas, gates, toolbar, AI chat
+  video/                # Video player
+  layout/               # Header
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+lib/
+  sim-engine/           # Circuit data model + propagation
+  stores/               # Zustand stores
+  episodes-data.ts      # Chapter 1 episode data
+  challenges-data.ts    # Challenge definitions
+
+public/examples/        # Preloaded circuit JSON files
+supabase/migrations/    # SQL migration files
+```
+
+## Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| `Delete` | Remove selected component/wire |
+| `Ctrl+Z` | Undo |
+| `Ctrl+Shift+Z` | Redo |
+| `Escape` | Deselect / cancel wire |
+
+## Simulator Usage
+
+1. **Place a component**: Click a gate in the left sidebar, then click on the canvas
+2. **Connect wires**: Click an output pin (right side of gate), then click an input pin
+3. **Toggle inputs**: Click an INPUT switch to flip it between 0 and 1
+4. **Delete**: Press Delete key, or use the delete tool
+5. **Pan**: Drag the canvas background
+6. **Zoom**: Scroll wheel
+
+## Deployment (Vercel)
+
+```bash
+vercel deploy
+```
+
+Add environment variables in Vercel project settings.
+
+## Color Palette
+
+| Name | Hex |
+|---|---|
+| Background | `#0A0A1A` |
+| Surface | `#12122A` |
+| Border | `#1E1E3A` |
+| Primary | `#58C4DD` |
+| Signal HIGH | `#83C167` |
+| Signal LOW | `#4A4A5A` |
+| Error | `#FC6255` |
+| Accent | `#FFFF00` |
+
+## License
+
+MIT
