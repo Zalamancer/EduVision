@@ -46,79 +46,246 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* AutoAnimation-style extended palette */
+  --color-surface-lowest: var(--surface-lowest);
+  --color-surface-low: var(--surface-low);
+  --color-surface: var(--surface);
+  --color-surface-high: var(--surface-high);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  --color-text-muted: var(--text-muted);
+  --color-bdr: var(--bdr);
+  --color-bdr-subtle: var(--bdr-subtle);
+  --color-glass: var(--glass);
+  --color-glass-border: var(--glass-border);
+
+  --animate-fade-in-up: fade-in-up 0.5s ease-out both;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 2s ease-in-out infinite;
 }
 
 :root {
-  --background: #0A0A1A;
-  --foreground: #E8E8F0;
-  --card: #12122A;
-  --card-foreground: #E8E8F0;
-  --popover: #12122A;
-  --popover-foreground: #E8E8F0;
-  --primary: #58C4DD;
-  --primary-foreground: #0A0A1A;
-  --secondary: #1E1E3A;
-  --secondary-foreground: #E8E8F0;
-  --muted: #1E1E3A;
-  --muted-foreground: #8888AA;
-  --accent: #1E1E3A;
-  --accent-foreground: #E8E8F0;
-  --destructive: #FC6255;
-  --border: #1E1E3A;
-  --input: #1E1E3A;
-  --ring: #58C4DD;
-  --chart-1: #58C4DD;
-  --chart-2: #83C167;
-  --chart-3: #FFFF00;
-  --chart-4: #FC6255;
-  --chart-5: #8888AA;
-  --radius: 0.5rem;
-  --sidebar: #12122A;
-  --sidebar-foreground: #E8E8F0;
-  --sidebar-primary: #58C4DD;
-  --sidebar-primary-foreground: #0A0A1A;
-  --sidebar-accent: #1E1E3A;
-  --sidebar-accent-foreground: #E8E8F0;
-  --sidebar-border: #1E1E3A;
-  --sidebar-ring: #58C4DD;
-  --signal-high: #83C167;
-  --signal-low: #4A4A5A;
+  /* Core palette — zinc-based like AutoAnimation */
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --popover-foreground: #fafafa;
+  --primary: #22c55e;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #22c55e;
+  --accent-foreground: #09090b;
+  --destructive: #ef4444;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #22c55e;
+  --chart-1: #22c55e;
+  --chart-2: #3b82f6;
+  --chart-3: #eab308;
+  --chart-4: #ef4444;
+  --chart-5: #a1a1aa;
+  --radius: 0.625rem;
+  --sidebar: #18181b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #22c55e;
+
+  /* Extended surface scale */
+  --surface-lowest: #0a0a0a;
+  --surface-low: #141414;
+  --surface: #1a1a1a;
+  --surface-high: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+  --text-muted: #52525b;
+  --bdr: #2a2a2a;
+  --bdr-subtle: rgba(255, 255, 255, 0.06);
+  --glass: rgba(39, 39, 42, 0.80);
+  --glass-border: rgba(255, 255, 255, 0.06);
+
+  /* Circuit signals */
+  --signal-high: #22c55e;
+  --signal-low: #52525b;
+
+  /* Canvas & gate rendering */
+  --canvas-bg: #09090b;
+  --canvas-grid-dot: #27272a;
+  --canvas-hint: #27272a;
+  --gate-body: #18181b;
+  --gate-border: #27272a;
+  --gate-low: #52525b;
+  --gate-label: #71717a;
+  --gate-selected-stroke: #ffffff;
+  --signal-high-bg: #052e16;
+  --signal-high-text: #4ade80;
+  --signal-high-glow: drop-shadow(0 0 6px #22c55e);
+  --led-active-bg: #1a2e1a;
+  --wire-label-bg: #27272a;
+  --switch-text: #fafafa;
 }
 
 .dark {
-  --background: #0A0A1A;
-  --foreground: #E8E8F0;
-  --card: #12122A;
-  --card-foreground: #E8E8F0;
-  --popover: #12122A;
-  --popover-foreground: #E8E8F0;
-  --primary: #58C4DD;
-  --primary-foreground: #0A0A1A;
-  --secondary: #1E1E3A;
-  --secondary-foreground: #E8E8F0;
-  --muted: #1E1E3A;
-  --muted-foreground: #8888AA;
-  --accent: #1E1E3A;
-  --accent-foreground: #E8E8F0;
-  --destructive: #FC6255;
-  --border: #1E1E3A;
-  --input: #1E1E3A;
-  --ring: #58C4DD;
-  --chart-1: #58C4DD;
-  --chart-2: #83C167;
-  --chart-3: #FFFF00;
-  --chart-4: #FC6255;
-  --chart-5: #8888AA;
-  --sidebar: #12122A;
-  --sidebar-foreground: #E8E8F0;
-  --sidebar-primary: #58C4DD;
-  --sidebar-primary-foreground: #0A0A1A;
-  --sidebar-accent: #1E1E3A;
-  --sidebar-accent-foreground: #E8E8F0;
-  --sidebar-border: #1E1E3A;
-  --sidebar-ring: #58C4DD;
-  --signal-high: #83C167;
-  --signal-low: #4A4A5A;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --card-foreground: #fafafa;
+  --popover: #18181b;
+  --popover-foreground: #fafafa;
+  --primary: #22c55e;
+  --primary-foreground: #09090b;
+  --secondary: #27272a;
+  --secondary-foreground: #fafafa;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa;
+  --accent: #22c55e;
+  --accent-foreground: #09090b;
+  --destructive: #ef4444;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #22c55e;
+  --chart-1: #22c55e;
+  --chart-2: #3b82f6;
+  --chart-3: #eab308;
+  --chart-4: #ef4444;
+  --chart-5: #a1a1aa;
+  --sidebar: #18181b;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #09090b;
+  --sidebar-accent: #27272a;
+  --sidebar-accent-foreground: #fafafa;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #22c55e;
+}
+
+/* ── Light theme ── */
+.light {
+  /* Core palette */
+  --background: #ffffff;
+  --foreground: #111827;
+  --card: #f9fafb;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  --primary: #22c55e;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+  --accent: #22c55e;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #22c55e;
+  --chart-1: #16a34a;
+  --chart-2: #2563eb;
+  --chart-3: #ca8a04;
+  --chart-4: #dc2626;
+  --chart-5: #6b7280;
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #22c55e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #22c55e;
+
+  /* Extended surface scale */
+  --surface-lowest: #f9fafb;
+  --surface-low: #f3f4f6;
+  --surface: #e5e7eb;
+  --surface-high: #d1d5db;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --text-muted: #9ca3af;
+  --bdr: #d1d5db;
+  --bdr-subtle: rgba(0, 0, 0, 0.06);
+  --glass: rgba(255, 255, 255, 0.80);
+  --glass-border: rgba(0, 0, 0, 0.06);
+
+  /* Circuit signals */
+  --signal-high: #22c55e;
+  --signal-low: #9ca3af;
+
+  /* Canvas & gate rendering */
+  --canvas-bg: #ffffff;
+  --canvas-grid-dot: #d1d5db;
+  --canvas-hint: #d1d5db;
+  --gate-body: #e5e7eb;
+  --gate-border: #d1d5db;
+  --gate-low: #9ca3af;
+  --gate-label: #6b7280;
+  --gate-selected-stroke: #111827;
+  --signal-high-bg: #dcfce7;
+  --signal-high-text: #166534;
+  --signal-high-glow: drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+  --led-active-bg: #dcfce7;
+  --wire-label-bg: #e5e7eb;
+  --switch-text: #111827;
+
+  /* Override palette for Tailwind utility remapping */
+  --t-white: 255 255 255;
+  --t-50: 249 250 251;
+  --t-100: 243 244 246;
+  --t-200: 229 231 235;
+  --t-300: 209 213 219;
+  --t-350: 196 200 207;
+  --t-400: 156 163 175;
+  --t-text-900: 17 24 39;
+  --t-text-800: 31 41 55;
+  --t-text-700: 55 65 81;
+  --t-text-600: 75 85 99;
+  --t-text-500: 107 114 128;
+  --t-text-400: 156 163 175;
+  --t-bdr-base: 0 0 0;
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes trace-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.9; }
+}
+
+@keyframes lesson-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @layer base {
@@ -133,22 +300,199 @@
   html {
     @apply font-sans;
   }
+
+  /* Scrollbar — zinc to match AutoAnimation */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #12122A;
+    background: #18181b;
   }
   ::-webkit-scrollbar-thumb {
-    background: #1E1E3A;
+    background: #27272a;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #8888AA;
+    background: #3f3f46;
   }
 }
 
-.wire-high { stroke: #83C167; }
-.wire-low { stroke: #4A4A5A; }
+/* ─── Glass utilities ─── */
+.glass {
+  background: rgba(39, 39, 42, 0.80);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-subtle {
+  background: rgba(24, 24, 27, 0.60);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.glass-card {
+  background: rgba(24, 24, 27, 0.80);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Glow effects ─── */
+.glow-green {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.15), 0 0 60px rgba(34, 197, 94, 0.05);
+}
+
+.hero-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+}
+
+/* ─── Circuit signals ─── */
+.wire-high { stroke: var(--signal-high); }
+.wire-low { stroke: var(--signal-low); }
 .gate-svg { overflow: visible; }
+
+/* ─── Grid background ─── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+.light .bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+}
+
+/* ══════════════════════════════════════════════════════════════════════════
+   Light Theme Overrides
+   Targets existing Tailwind utility classes so component files stay untouched.
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Scrollbars ── */
+.light ::-webkit-scrollbar-track { background: #f9fafb; }
+.light ::-webkit-scrollbar-thumb { background: rgba(156, 163, 175, 0.5); }
+.light ::-webkit-scrollbar-thumb:hover { background: rgba(107, 114, 128, 0.7); }
+
+/* ── Glass morphism ── */
+.light .glass {
+  background: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06);
+}
+.light .glass-subtle {
+  background: rgba(255, 255, 255, 0.60) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+.light .glass-card {
+  background: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Glow effects ── */
+.light .glow-green {
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.10), 0 0 60px rgba(34, 197, 94, 0.04);
+}
+
+/* ── Backgrounds: zinc scale ── */
+.light .bg-zinc-950  { background-color: rgb(var(--t-white)) !important; }
+.light .bg-zinc-900  { background-color: rgb(var(--t-50)) !important; }
+.light .bg-zinc-800  { background-color: rgb(var(--t-100)) !important; }
+.light .bg-zinc-700  { background-color: rgb(var(--t-200)) !important; }
+.light .bg-black     { background-color: rgb(var(--t-100)) !important; }
+
+/* ── Backgrounds: zinc with opacity ── */
+.light .bg-zinc-900\/80 { background-color: rgb(var(--t-50) / 0.85) !important; }
+.light .bg-zinc-900\/90 { background-color: rgb(var(--t-50) / 0.9) !important; }
+.light .bg-zinc-900\/60 { background-color: rgb(var(--t-50) / 0.7) !important; }
+.light .bg-zinc-900\/50 { background-color: rgb(var(--t-50) / 0.6) !important; }
+.light .bg-zinc-900\/40 { background-color: rgb(var(--t-50) / 0.5) !important; }
+.light .bg-zinc-800\/95 { background-color: rgb(var(--t-100) / 0.95) !important; }
+.light .bg-zinc-800\/80 { background-color: rgb(var(--t-100) / 0.85) !important; }
+.light .bg-zinc-800\/60 { background-color: rgb(var(--t-100) / 0.7) !important; }
+.light .bg-zinc-800\/50 { background-color: rgb(var(--t-100) / 0.6) !important; }
+.light .bg-zinc-800\/40 { background-color: rgb(var(--t-100) / 0.5) !important; }
+.light .bg-zinc-700\/60 { background-color: rgb(var(--t-200) / 0.6) !important; }
+.light .bg-zinc-700\/50 { background-color: rgb(var(--t-200) / 0.5) !important; }
+
+/* ── Backgrounds: white tints → black tints ── */
+.light .bg-white\/\[0\.03\] { background-color: rgb(var(--t-bdr-base) / 0.03) !important; }
+.light .bg-white\/\[0\.06\] { background-color: rgb(var(--t-bdr-base) / 0.04) !important; }
+.light .bg-white\/5   { background-color: rgb(var(--t-bdr-base) / 0.04) !important; }
+.light .bg-white\/10  { background-color: rgb(var(--t-bdr-base) / 0.06) !important; }
+.light .bg-white\/20  { background-color: rgb(var(--t-bdr-base) / 0.08) !important; }
+
+/* ── Backgrounds: black overlays (reduce intensity) ── */
+.light .bg-black\/80  { background-color: rgba(0, 0, 0, 0.5) !important; }
+.light .bg-black\/60  { background-color: rgba(0, 0, 0, 0.35) !important; }
+.light .bg-black\/50  { background-color: rgba(0, 0, 0, 0.25) !important; }
+.light .bg-black\/30  { background-color: rgba(0, 0, 0, 0.12) !important; }
+.light .bg-black\/20  { background-color: rgba(0, 0, 0, 0.06) !important; }
+
+/* ── Backgrounds: hover ── */
+.light .hover\:bg-zinc-800:hover      { background-color: rgb(var(--t-200)) !important; }
+.light .hover\:bg-zinc-800\/80:hover  { background-color: rgb(var(--t-200) / 0.85) !important; }
+.light .hover\:bg-zinc-800\/50:hover  { background-color: rgb(var(--t-200) / 0.5) !important; }
+.light .hover\:bg-zinc-800\/40:hover  { background-color: rgb(var(--t-200) / 0.4) !important; }
+.light .hover\:bg-zinc-700:hover      { background-color: rgb(var(--t-300)) !important; }
+.light .hover\:bg-zinc-700\/60:hover  { background-color: rgb(var(--t-300) / 0.6) !important; }
+
+/* ── Text colors ── */
+.light .text-white     { color: rgb(var(--t-text-900)) !important; }
+.light .text-zinc-50   { color: rgb(var(--t-text-900)) !important; }
+.light .text-zinc-100  { color: rgb(var(--t-text-900)) !important; }
+.light .text-zinc-200  { color: rgb(var(--t-text-800)) !important; }
+.light .text-zinc-300  { color: rgb(var(--t-text-700)) !important; }
+.light .text-zinc-400  { color: rgb(var(--t-text-600)) !important; }
+.light .text-zinc-500  { color: rgb(var(--t-text-500)) !important; }
+.light .text-zinc-600  { color: rgb(var(--t-text-400)) !important; }
+.light .text-gray-400  { color: rgb(var(--t-text-600)) !important; }
+
+/* ── Text hover ── */
+.light .hover\:text-white:hover    { color: rgb(var(--t-text-900)) !important; }
+.light .hover\:text-zinc-50:hover  { color: rgb(var(--t-text-900)) !important; }
+.light .hover\:text-zinc-100:hover { color: rgb(var(--t-text-900)) !important; }
+.light .hover\:text-zinc-200:hover { color: rgb(var(--t-text-800)) !important; }
+.light .hover\:text-zinc-300:hover { color: rgb(var(--t-text-700)) !important; }
+
+/* ── Border colors ── */
+.light .border-white\/5          { border-color: rgb(var(--t-bdr-base) / 0.06) !important; }
+.light .border-white\/\[0\.06\]  { border-color: rgb(var(--t-bdr-base) / 0.06) !important; }
+.light .border-white\/\[0\.12\]  { border-color: rgb(var(--t-bdr-base) / 0.10) !important; }
+.light .border-white\/10         { border-color: rgb(var(--t-bdr-base) / 0.10) !important; }
+.light .border-zinc-700          { border-color: rgb(var(--t-300)) !important; }
+.light .border-zinc-700\/50      { border-color: rgb(var(--t-300) / 0.5) !important; }
+.light .border-zinc-800          { border-color: rgb(var(--t-200)) !important; }
+.light .border-zinc-800\/50      { border-color: rgb(var(--t-200) / 0.5) !important; }
+
+/* ── Placeholder ── */
+.light .placeholder-zinc-600::placeholder { color: rgb(var(--t-text-400)) !important; }
+.light .placeholder-zinc-500::placeholder { color: rgb(var(--t-text-400)) !important; }
+.light .placeholder\:text-zinc-500::placeholder { color: rgb(var(--t-text-400)) !important; }
+
+/* ── Divide colors ── */
+.light .divide-white\/5 > :not([hidden]) ~ :not([hidden])  { border-color: rgb(var(--t-bdr-base) / 0.06) !important; }
+.light .divide-zinc-800 > :not([hidden]) ~ :not([hidden])  { border-color: rgb(var(--t-200)) !important; }
+
+/* ── Gradient overrides ── */
+.light .from-zinc-950    { --tw-gradient-from: rgb(var(--t-white)) !important; }
+.light .from-zinc-900    { --tw-gradient-from: rgb(var(--t-50)) !important; }
+.light .from-black\/80   { --tw-gradient-from: rgba(0, 0, 0, 0.15) !important; }
+.light .to-zinc-900      { --tw-gradient-to: rgb(var(--t-50)) !important; }
+.light .to-zinc-950      { --tw-gradient-to: rgb(var(--t-white)) !important; }
+
+/* ── Animated tab pills: invert in light mode ── */
+.light .bg-white.text-black {
+  background-color: rgb(var(--t-text-900)) !important;
+  color: rgb(var(--t-white)) !important;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════ */

@@ -18,17 +18,6 @@ function LoginForm() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const inputStyle = {
-    background: "#1E1E3A",
-    color: "#E8E8F0",
-    border: "1px solid #1E1E3A",
-    borderRadius: "6px",
-    padding: "10px 12px",
-    fontSize: "14px",
-    width: "100%",
-    outline: "none",
-  };
-
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -64,39 +53,30 @@ function LoginForm() {
   };
 
   return (
-    <div
-      className="min-h-screen flex items-center justify-center px-4"
-      style={{ background: "#0A0A1A" }}
-    >
-      <div
-        className="w-full max-w-sm rounded-xl p-8 border"
-        style={{ background: "#12122A", borderColor: "#1E1E3A" }}
-      >
+    <div className="min-h-screen flex items-center justify-center px-4 bg-background">
+      <div className="glass-card w-full max-w-sm rounded-xl p-8">
         {/* Logo */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
-            <span className="text-2xl font-black" style={{ color: "#E8E8F0" }}>
-              Edu<span style={{ color: "#58C4DD" }}>Vision</span>
+            <span className="text-2xl font-black text-zinc-50">
+              Edu<span className="text-primary">Vision</span>
             </span>
           </Link>
-          <p className="mt-2 text-sm" style={{ color: "#8888AA" }}>
+          <p className="mt-2 text-sm text-zinc-400">
             {tab === "login" ? "Welcome back" : "Create your account"}
           </p>
         </div>
 
         {/* Tabs */}
-        <div
-          className="flex rounded-lg p-1 mb-6"
-          style={{ background: "#1E1E3A" }}
-        >
+        <div className="flex rounded-lg p-1 mb-6 bg-zinc-800">
           {(["login", "signup"] as const).map((t) => (
             <button
               key={t}
-              className="flex-1 py-2 text-sm font-medium rounded transition-all"
-              style={{
-                background: tab === t ? "#12122A" : "transparent",
-                color: tab === t ? "#E8E8F0" : "#8888AA",
-              }}
+              className={`flex-1 py-2 text-sm font-medium rounded transition-all ${
+                tab === t
+                  ? "bg-zinc-900 text-zinc-50"
+                  : "text-zinc-500 hover:text-zinc-400"
+              }`}
               onClick={() => { setTab(t); setError(""); setSuccess(""); }}
             >
               {t === "login" ? "Sign In" : "Sign Up"}
@@ -106,8 +86,7 @@ function LoginForm() {
 
         {/* Google OAuth */}
         <button
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium mb-4 transition-all border"
-          style={{ borderColor: "#1E1E3A", color: "#E8E8F0", background: "#0A0A1A" }}
+          className="glass w-full flex items-center justify-center gap-2 py-2.5 rounded-lg text-sm font-medium mb-4 transition-all border-white/[0.06] text-zinc-50 hover:bg-zinc-800/40 hover:border-white/[0.12]"
           onClick={handleGoogle}
         >
           <svg width="16" height="16" viewBox="0 0 18 18">
@@ -120,16 +99,16 @@ function LoginForm() {
         </button>
 
         <div className="flex items-center gap-3 mb-4">
-          <div className="flex-1 h-px" style={{ background: "#1E1E3A" }} />
-          <span className="text-xs" style={{ color: "#4A4A5A" }}>or</span>
-          <div className="flex-1 h-px" style={{ background: "#1E1E3A" }} />
+          <div className="flex-1 h-px bg-zinc-800" />
+          <span className="text-xs text-zinc-500">or</span>
+          <div className="flex-1 h-px bg-zinc-800" />
         </div>
 
         {/* Form */}
         <form onSubmit={handleEmailAuth} className="flex flex-col gap-3">
           {tab === "signup" && (
             <input
-              style={inputStyle}
+              className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-50 placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
               placeholder="Your name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -137,7 +116,7 @@ function LoginForm() {
             />
           )}
           <input
-            style={inputStyle}
+            className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-50 placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
             type="email"
             placeholder="Email"
             value={email}
@@ -145,7 +124,7 @@ function LoginForm() {
             required
           />
           <input
-            style={inputStyle}
+            className="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-3 py-2.5 text-sm text-zinc-50 placeholder:text-zinc-500 outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all"
             type="password"
             placeholder="Password"
             value={password}
@@ -155,22 +134,18 @@ function LoginForm() {
           />
 
           {error && (
-            <p className="text-xs" style={{ color: "#FC6255" }}>{error}</p>
+            <p className="text-xs text-red-400">{error}</p>
           )}
           {success && (
-            <p className="text-xs" style={{ color: "#83C167" }}>{success}</p>
+            <p className="text-xs text-green-400">{success}</p>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="py-2.5 rounded-lg font-semibold text-sm mt-1 transition-all"
-            style={{
-              background: loading ? "#1E1E3A" : "#58C4DD",
-              color: loading ? "#4A4A5A" : "#0A0A1A",
-            }}
+            className="py-2.5 rounded-lg font-semibold text-sm mt-1 transition-all bg-primary text-primary-foreground hover:bg-green-400 disabled:bg-zinc-800 disabled:text-zinc-500"
           >
-            {loading ? "Loading…" : tab === "login" ? "Sign In" : "Create Account"}
+            {loading ? "Loading..." : tab === "login" ? "Sign In" : "Create Account"}
           </button>
         </form>
       </div>
@@ -181,8 +156,8 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#0A0A1A" }}>
-        <div style={{ color: "#8888AA" }}>Loading…</div>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-zinc-400">Loading...</div>
       </div>
     }>
       <LoginForm />

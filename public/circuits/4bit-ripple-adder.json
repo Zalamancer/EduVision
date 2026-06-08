@@ -1,0 +1,41 @@
+{
+  "id": "circuit-4bit-ripple-adder",
+  "name": "4-Bit Ripple Carry Adder",
+  "components": [
+    { "id": "rca-inA0", "type": "INPUT", "x": 40, "y": 60, "rotation": 0, "label": "A0", "value": false },
+    { "id": "rca-inB0", "type": "INPUT", "x": 40, "y": 140, "rotation": 0, "label": "B0", "value": false },
+    { "id": "rca-inA1", "type": "INPUT", "x": 40, "y": 240, "rotation": 0, "label": "A1", "value": false },
+    { "id": "rca-inB1", "type": "INPUT", "x": 40, "y": 320, "rotation": 0, "label": "B1", "value": false },
+    { "id": "rca-inA2", "type": "INPUT", "x": 40, "y": 420, "rotation": 0, "label": "A2", "value": false },
+    { "id": "rca-inB2", "type": "INPUT", "x": 40, "y": 500, "rotation": 0, "label": "B2", "value": false },
+    { "id": "rca-inA3", "type": "INPUT", "x": 40, "y": 600, "rotation": 0, "label": "A3", "value": false },
+    { "id": "rca-inB3", "type": "INPUT", "x": 40, "y": 680, "rotation": 0, "label": "B3", "value": false },
+    { "id": "rca-fa0", "type": "FULL_ADDER", "x": 200, "y": 60, "rotation": 0, "label": "FA0" },
+    { "id": "rca-fa1", "type": "FULL_ADDER", "x": 200, "y": 240, "rotation": 0, "label": "FA1" },
+    { "id": "rca-fa2", "type": "FULL_ADDER", "x": 200, "y": 420, "rotation": 0, "label": "FA2" },
+    { "id": "rca-fa3", "type": "FULL_ADDER", "x": 200, "y": 600, "rotation": 0, "label": "FA3" },
+    { "id": "rca-outS0", "type": "OUTPUT", "x": 500, "y": 60, "rotation": 0, "label": "S0" },
+    { "id": "rca-outS1", "type": "OUTPUT", "x": 500, "y": 240, "rotation": 0, "label": "S1" },
+    { "id": "rca-outS2", "type": "OUTPUT", "x": 500, "y": 420, "rotation": 0, "label": "S2" },
+    { "id": "rca-outS3", "type": "OUTPUT", "x": 500, "y": 600, "rotation": 0, "label": "S3" },
+    { "id": "rca-outCout", "type": "OUTPUT", "x": 500, "y": 720, "rotation": 0, "label": "Cout" }
+  ],
+  "wires": [
+    { "id": "rca-w1", "from": { "componentId": "rca-inA0", "pinIndex": 0 }, "to": { "componentId": "rca-fa0", "pinIndex": 0 } },
+    { "id": "rca-w2", "from": { "componentId": "rca-inB0", "pinIndex": 0 }, "to": { "componentId": "rca-fa0", "pinIndex": 1 } },
+    { "id": "rca-w3", "from": { "componentId": "rca-inA1", "pinIndex": 0 }, "to": { "componentId": "rca-fa1", "pinIndex": 0 } },
+    { "id": "rca-w4", "from": { "componentId": "rca-inB1", "pinIndex": 0 }, "to": { "componentId": "rca-fa1", "pinIndex": 1 } },
+    { "id": "rca-w5", "from": { "componentId": "rca-inA2", "pinIndex": 0 }, "to": { "componentId": "rca-fa2", "pinIndex": 0 } },
+    { "id": "rca-w6", "from": { "componentId": "rca-inB2", "pinIndex": 0 }, "to": { "componentId": "rca-fa2", "pinIndex": 1 } },
+    { "id": "rca-w7", "from": { "componentId": "rca-inA3", "pinIndex": 0 }, "to": { "componentId": "rca-fa3", "pinIndex": 0 } },
+    { "id": "rca-w8", "from": { "componentId": "rca-inB3", "pinIndex": 0 }, "to": { "componentId": "rca-fa3", "pinIndex": 1 } },
+    { "id": "rca-w9",  "from": { "componentId": "rca-fa0", "pinIndex": 1 }, "to": { "componentId": "rca-fa1", "pinIndex": 2 } },
+    { "id": "rca-w10", "from": { "componentId": "rca-fa1", "pinIndex": 1 }, "to": { "componentId": "rca-fa2", "pinIndex": 2 } },
+    { "id": "rca-w11", "from": { "componentId": "rca-fa2", "pinIndex": 1 }, "to": { "componentId": "rca-fa3", "pinIndex": 2 } },
+    { "id": "rca-w12", "from": { "componentId": "rca-fa0", "pinIndex": 0 }, "to": { "componentId": "rca-outS0", "pinIndex": 0 } },
+    { "id": "rca-w13", "from": { "componentId": "rca-fa1", "pinIndex": 0 }, "to": { "componentId": "rca-outS1", "pinIndex": 0 } },
+    { "id": "rca-w14", "from": { "componentId": "rca-fa2", "pinIndex": 0 }, "to": { "componentId": "rca-outS2", "pinIndex": 0 } },
+    { "id": "rca-w15", "from": { "componentId": "rca-fa3", "pinIndex": 0 }, "to": { "componentId": "rca-outS3", "pinIndex": 0 } },
+    { "id": "rca-w16", "from": { "componentId": "rca-fa3", "pinIndex": 1 }, "to": { "componentId": "rca-outCout", "pinIndex": 0 } }
+  ]
+}

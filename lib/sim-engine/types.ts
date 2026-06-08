@@ -1,14 +1,22 @@
 export type GateType =
-  | "AND"
-  | "OR"
-  | "NOT"
-  | "NAND"
-  | "NOR"
-  | "XOR"
-  | "XNOR"
-  | "INPUT"
-  | "OUTPUT"
-  | "BUFFER";
+  // Basic gates (existing)
+  | "AND" | "OR" | "NOT" | "NAND" | "NOR" | "XOR" | "XNOR" | "BUFFER"
+  | "INPUT" | "OUTPUT"
+  // Compound (existing)
+  | "MUX_2TO1" | "FULL_ADDER" | "DECODER_2TO4"
+  // Gates - new
+  | "CONTROLLED_BUFFER" | "CONTROLLED_INVERTER"
+  // Plexers - new
+  | "MUX_4TO1" | "MUX_8TO1" | "DEMUX_1TO4" | "PRIORITY_ENCODER" | "BIT_SELECTOR"
+  // Arithmetic - new
+  | "SUBTRACTOR" | "MULTIPLIER" | "DIVIDER" | "NEGATOR" | "COMPARATOR" | "SHIFTER" | "BIT_ADDER"
+  // Memory - new
+  | "D_FLIP_FLOP" | "T_FLIP_FLOP" | "JK_FLIP_FLOP" | "SR_FLIP_FLOP"
+  | "REGISTER" | "COUNTER" | "SHIFT_REGISTER"
+  // Wiring - new
+  | "CLOCK" | "CONSTANT" | "SPLITTER" | "PROBE" | "TUNNEL" | "POWER" | "GROUND"
+  // I/O - new
+  | "SEVEN_SEGMENT" | "HEX_DISPLAY" | "LED_MATRIX" | "BUTTON";
 
 export interface PinRef {
   componentId: string;
@@ -51,4 +59,23 @@ export interface TruthTable {
   inputLabels: string[];
   outputLabels: string[];
   rows: TruthTableRow[];
+}
+
+export interface PropagationLevel {
+  depth: number;
+  evaluatedIds: string[];
+  activeWireIds: string[];
+  signalState: SignalState;
+}
+
+export interface PropagationTrace {
+  levels: PropagationLevel[];
+  totalSteps: number;
+}
+
+export interface BusGroup {
+  id: string;
+  label: string;          // e.g. "A" or "F"
+  bitWidth: number;       // e.g. 3
+  componentIds: string[]; // ordered MSB-first: ["a2", "a1", "a0"]
 }

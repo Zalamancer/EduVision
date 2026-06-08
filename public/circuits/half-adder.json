@@ -1,0 +1,20 @@
+{
+  "id": "circuit-half-adder",
+  "name": "Half Adder",
+  "components": [
+    { "id": "ha-inA", "type": "INPUT", "x": 40, "y": 80, "rotation": 0, "label": "A", "value": false },
+    { "id": "ha-inB", "type": "INPUT", "x": 40, "y": 200, "rotation": 0, "label": "B", "value": false },
+    { "id": "ha-xor", "type": "XOR", "x": 220, "y": 80, "rotation": 0, "label": "XOR" },
+    { "id": "ha-and", "type": "AND", "x": 220, "y": 200, "rotation": 0, "label": "AND" },
+    { "id": "ha-outSum", "type": "OUTPUT", "x": 420, "y": 80, "rotation": 0, "label": "Sum" },
+    { "id": "ha-outCarry", "type": "OUTPUT", "x": 420, "y": 200, "rotation": 0, "label": "Carry" }
+  ],
+  "wires": [
+    { "id": "ha-w1", "from": { "componentId": "ha-inA", "pinIndex": 0 }, "to": { "componentId": "ha-xor", "pinIndex": 0 } },
+    { "id": "ha-w2", "from": { "componentId": "ha-inB", "pinIndex": 0 }, "to": { "componentId": "ha-xor", "pinIndex": 1 } },
+    { "id": "ha-w3", "from": { "componentId": "ha-inA", "pinIndex": 0 }, "to": { "componentId": "ha-and", "pinIndex": 0 } },
+    { "id": "ha-w4", "from": { "componentId": "ha-inB", "pinIndex": 0 }, "to": { "componentId": "ha-and", "pinIndex": 1 } },
+    { "id": "ha-w5", "from": { "componentId": "ha-xor", "pinIndex": 0 }, "to": { "componentId": "ha-outSum", "pinIndex": 0 } },
+    { "id": "ha-w6", "from": { "componentId": "ha-and", "pinIndex": 0 }, "to": { "componentId": "ha-outCarry", "pinIndex": 0 } }
+  ]
+}

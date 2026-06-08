@@ -1,11 +1,11 @@
-import Anthropic from "@anthropic-ai/sdk";
 import { NextRequest } from "next/server";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${GEMINI_API_KEY}`;
 
 export async function POST(req: NextRequest) {
   try {
-    const { circuit, question } = await req.json();
+    const { circuit, question, mode = "tutor" } = await req.json();
 
     const gateCount = circuit?.components?.length ?? 0;
     const wireCount = circuit?.wires?.length ?? 0;
@@ -21,21 +21,30 @@ Inputs: ${inputs.join(", ") || "none"}
 Outputs: ${outputs.join(", ") || "none"}
     `.trim();
 
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 600,
-      system:
-        "You are a digital logic tutor. Explain circuits clearly and concisely to students. Use plain language. Keep responses under 150 words.",
-      messages: [
-        {
-          role: "user",
-          content: `Here is a circuit:\n${circuitSummary}\n\nUser question: ${question ?? "What does this circuit do?"}`,
-        },
-      ],
+    const systemPrompt = mode === "build"
+      ? `You are a digital logic assistant. Explain what the circuit does directly — its truth table, function, and how signals flow from inputs to outputs. Be clear and concise. No questions back. Keep responses under 150 words.`
+      : `You are a Socratic digital logic tutor. Instead of explaining what the circuit does directly, guide the student through discovery:
+1. Ask them to identify the gate types they see
+2. Ask what each gate outputs for the current inputs
+3. Walk them through tracing the signal path step by step with questions
+4. Confirm their understanding before moving to the next gate
+
+Use plain language. Keep responses under 150 words.`;
+
+    const res = await fetch(GEMINI_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ parts: [{ text: `Here is a circuit:\n${circuitSummary}\n\nUser question: ${question ?? "What does this circuit do?"}` }] }],
+        generationConfig: { maxOutputTokens: 600, temperature: 0.7 },
+      }),
     });
 
-    const reply = response.content[0].type === "text" ? response.content[0].text : "No explanation available.";
+    if (!res.ok) throw new Error(`Gemini API ${res.status}`);
 
+    const data = await res.json();
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text ?? "No explanation available.";
     return Response.json({ reply });
   } catch (err) {
     console.error("explain-circuit error:", err);

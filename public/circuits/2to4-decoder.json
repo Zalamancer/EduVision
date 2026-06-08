@@ -1,0 +1,34 @@
+{
+  "id": "circuit-2to4-decoder",
+  "name": "2-to-4 Decoder",
+  "components": [
+    { "id": "dec-inA1", "type": "INPUT", "x": 40, "y": 80, "rotation": 0, "label": "A1", "value": false },
+    { "id": "dec-inA0", "type": "INPUT", "x": 40, "y": 200, "rotation": 0, "label": "A0", "value": false },
+    { "id": "dec-notA1", "type": "NOT", "x": 180, "y": 80, "rotation": 0, "label": "NOT_A1" },
+    { "id": "dec-notA0", "type": "NOT", "x": 180, "y": 200, "rotation": 0, "label": "NOT_A0" },
+    { "id": "dec-and0", "type": "AND", "x": 340, "y": 40, "rotation": 0, "label": "AND0" },
+    { "id": "dec-and1", "type": "AND", "x": 340, "y": 140, "rotation": 0, "label": "AND1" },
+    { "id": "dec-and2", "type": "AND", "x": 340, "y": 240, "rotation": 0, "label": "AND2" },
+    { "id": "dec-and3", "type": "AND", "x": 340, "y": 340, "rotation": 0, "label": "AND3" },
+    { "id": "dec-outD0", "type": "OUTPUT", "x": 520, "y": 40, "rotation": 0, "label": "D0" },
+    { "id": "dec-outD1", "type": "OUTPUT", "x": 520, "y": 140, "rotation": 0, "label": "D1" },
+    { "id": "dec-outD2", "type": "OUTPUT", "x": 520, "y": 240, "rotation": 0, "label": "D2" },
+    { "id": "dec-outD3", "type": "OUTPUT", "x": 520, "y": 340, "rotation": 0, "label": "D3" }
+  ],
+  "wires": [
+    { "id": "dec-w1", "from": { "componentId": "dec-inA1", "pinIndex": 0 }, "to": { "componentId": "dec-notA1", "pinIndex": 0 } },
+    { "id": "dec-w2", "from": { "componentId": "dec-inA0", "pinIndex": 0 }, "to": { "componentId": "dec-notA0", "pinIndex": 0 } },
+    { "id": "dec-w3", "from": { "componentId": "dec-notA1", "pinIndex": 0 }, "to": { "componentId": "dec-and0", "pinIndex": 0 } },
+    { "id": "dec-w4", "from": { "componentId": "dec-notA0", "pinIndex": 0 }, "to": { "componentId": "dec-and0", "pinIndex": 1 } },
+    { "id": "dec-w5", "from": { "componentId": "dec-notA1", "pinIndex": 0 }, "to": { "componentId": "dec-and1", "pinIndex": 0 } },
+    { "id": "dec-w6", "from": { "componentId": "dec-inA0", "pinIndex": 0 }, "to": { "componentId": "dec-and1", "pinIndex": 1 } },
+    { "id": "dec-w7", "from": { "componentId": "dec-inA1", "pinIndex": 0 }, "to": { "componentId": "dec-and2", "pinIndex": 0 } },
+    { "id": "dec-w8", "from": { "componentId": "dec-notA0", "pinIndex": 0 }, "to": { "componentId": "dec-and2", "pinIndex": 1 } },
+    { "id": "dec-w9", "from": { "componentId": "dec-inA1", "pinIndex": 0 }, "to": { "componentId": "dec-and3", "pinIndex": 0 } },
+    { "id": "dec-w10", "from": { "componentId": "dec-inA0", "pinIndex": 0 }, "to": { "componentId": "dec-and3", "pinIndex": 1 } },
+    { "id": "dec-w11", "from": { "componentId": "dec-and0", "pinIndex": 0 }, "to": { "componentId": "dec-outD0", "pinIndex": 0 } },
+    { "id": "dec-w12", "from": { "componentId": "dec-and1", "pinIndex": 0 }, "to": { "componentId": "dec-outD1", "pinIndex": 0 } },
+    { "id": "dec-w13", "from": { "componentId": "dec-and2", "pinIndex": 0 }, "to": { "componentId": "dec-outD2", "pinIndex": 0 } },
+    { "id": "dec-w14", "from": { "componentId": "dec-and3", "pinIndex": 0 }, "to": { "componentId": "dec-outD3", "pinIndex": 0 } }
+  ]
+}

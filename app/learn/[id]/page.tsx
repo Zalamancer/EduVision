@@ -30,7 +30,7 @@ export default async function EpisodePage({ params }: Props) {
   const { prev, next } = getAdjacentEpisodes(id);
 
   return (
-    <div className="min-h-screen" style={{ background: "#0A0A1A" }}>
+    <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto px-4 py-8 flex gap-6">
         {/* Main */}
         <div className="flex-1 min-w-0">
@@ -40,17 +40,14 @@ export default async function EpisodePage({ params }: Props) {
           {/* Episode info */}
           <div className="mt-6">
             <div className="flex items-center gap-2 mb-2">
-              <span
-                className="text-xs px-2 py-0.5 rounded font-mono"
-                style={{ background: "#1E1E3A", color: "#58C4DD" }}
-              >
-                Ch.{ep.chapter} · Ep.{ep.episode}
+              <span className="text-xs px-2 py-0.5 rounded font-mono bg-zinc-800 text-primary">
+                Ch.{ep.chapter} &middot; Ep.{ep.episode}
               </span>
             </div>
-            <h1 className="text-2xl font-black mb-3" style={{ color: "#E8E8F0" }}>
+            <h1 className="text-2xl font-black mb-3 text-zinc-50">
               {ep.title}
             </h1>
-            <p className="leading-relaxed" style={{ color: "#8888AA" }}>
+            <p className="leading-relaxed text-zinc-400">
               {ep.description}
             </p>
 
@@ -59,8 +56,7 @@ export default async function EpisodePage({ params }: Props) {
               {ep.topics.map((t) => (
                 <span
                   key={t}
-                  className="text-xs px-2 py-1 rounded"
-                  style={{ background: "#1E1E3A", color: "#8888AA" }}
+                  className="text-xs px-2 py-1 rounded bg-zinc-800 text-zinc-400"
                 >
                   {t}
                 </span>
@@ -68,19 +64,18 @@ export default async function EpisodePage({ params }: Props) {
             </div>
 
             {/* Try in simulator */}
-            <div className="mt-8 p-4 rounded-xl border" style={{ background: "#12122A", borderColor: "#1E1E3A" }}>
-              <h3 className="font-semibold mb-2" style={{ color: "#E8E8F0" }}>
+            <div className="glass-card mt-8 p-4 rounded-xl">
+              <h3 className="font-semibold mb-2 text-zinc-50">
                 Apply what you learned
               </h3>
-              <p className="text-sm mb-4" style={{ color: "#8888AA" }}>
+              <p className="text-sm mb-4 text-zinc-400">
                 Open the simulator and build the circuit covered in this episode.
               </p>
               <Link
                 href="/simulator"
-                className="inline-block px-4 py-2 rounded-lg text-sm font-medium transition-all"
-                style={{ background: "#58C4DD", color: "#0A0A1A" }}
+                className="inline-block px-4 py-2 rounded-lg text-sm font-medium transition-all bg-primary text-primary-foreground hover:bg-green-400"
               >
-                Open Simulator →
+                Open Simulator &rarr;
               </Link>
             </div>
 
@@ -89,21 +84,19 @@ export default async function EpisodePage({ params }: Props) {
               {prev && (
                 <Link
                   href={`/learn/${prev.id}`}
-                  className="flex-1 p-3 rounded-lg border text-sm transition-all"
-                  style={{ background: "#12122A", borderColor: "#1E1E3A", color: "#8888AA" }}
+                  className="glass-card flex-1 p-3 rounded-lg text-sm transition-all hover:border-white/[0.12]"
                 >
-                  <div className="text-xs mb-1" style={{ color: "#4A4A5A" }}>← Previous</div>
-                  <div style={{ color: "#E8E8F0" }}>{prev.title}</div>
+                  <div className="text-xs mb-1 text-zinc-500">&larr; Previous</div>
+                  <div className="text-zinc-50">{prev.title}</div>
                 </Link>
               )}
               {next && (
                 <Link
                   href={`/learn/${next.id}`}
-                  className="flex-1 p-3 rounded-lg border text-sm text-right transition-all"
-                  style={{ background: "#12122A", borderColor: "#1E1E3A", color: "#8888AA" }}
+                  className="glass-card flex-1 p-3 rounded-lg text-sm text-right transition-all hover:border-white/[0.12]"
                 >
-                  <div className="text-xs mb-1" style={{ color: "#4A4A5A" }}>Next →</div>
-                  <div style={{ color: "#E8E8F0" }}>{next.title}</div>
+                  <div className="text-xs mb-1 text-zinc-500">Next &rarr;</div>
+                  <div className="text-zinc-50">{next.title}</div>
                 </Link>
               )}
             </div>
@@ -112,11 +105,8 @@ export default async function EpisodePage({ params }: Props) {
 
         {/* Sidebar: episode list */}
         <div className="w-64 flex-shrink-0 hidden lg:block">
-          <div
-            className="rounded-xl border overflow-hidden"
-            style={{ background: "#12122A", borderColor: "#1E1E3A" }}
-          >
-            <div className="px-3 py-2 border-b text-xs font-bold tracking-widest uppercase" style={{ borderColor: "#1E1E3A", color: "#8888AA" }}>
+          <div className="glass-card rounded-xl overflow-hidden">
+            <div className="px-3 py-2 border-b border-zinc-800 text-xs font-bold tracking-widest uppercase text-zinc-400">
               Chapter 1
             </div>
             {EPISODES.map((e) => {
@@ -125,14 +115,17 @@ export default async function EpisodePage({ params }: Props) {
                 <Link
                   key={e.id}
                   href={`/learn/${e.id}`}
-                  className="flex items-center gap-2 px-3 py-2.5 text-sm border-b transition-all"
-                  style={{
-                    borderColor: "#1E1E3A",
-                    background: isActive ? "#1E1E3A" : "transparent",
-                    color: isActive ? "#58C4DD" : "#8888AA",
-                  }}
+                  className={`flex items-center gap-2 px-3 py-2.5 text-sm border-b border-zinc-800 transition-all ${
+                    isActive
+                      ? "bg-zinc-800 text-primary"
+                      : "text-zinc-400 hover:bg-zinc-800/50"
+                  }`}
                 >
-                  <span className="font-mono text-xs flex-shrink-0" style={{ color: isActive ? "#58C4DD" : "#4A4A5A" }}>
+                  <span
+                    className={`font-mono text-xs flex-shrink-0 ${
+                      isActive ? "text-primary" : "text-zinc-500"
+                    }`}
+                  >
                     {String(e.episode).padStart(2, "0")}
                   </span>
                   <span className="truncate">{e.title}</span>

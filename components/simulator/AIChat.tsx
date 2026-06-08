@@ -13,10 +13,14 @@ const SUGGESTIONS = [
   "Build a half adder circuit",
   "Explain this circuit",
   "Why isn't this working?",
-  "Build a 2-to-1 mux",
+  "Build a 1-bit comparator",
+  "Build a 2-bit comparator",
 ];
 
+type AiMode = "tutor" | "build";
+
 export default function AIChat() {
+  const [mode, setMode] = useState<AiMode>("tutor");
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -26,6 +30,7 @@ export default function AIChat() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pendingBuild, setPendingBuild] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const { circuit, signalState, setCircuit } = useCircuitStore();
 
@@ -41,50 +46,88 @@ export default function AIChat() {
     setLoading(true);
 
     try {
+      // ── Phase 2: User answered clarifying questions → generate circuit ──
+      if (pendingBuild) {
+        const enriched = `${pendingBuild}\n\nUser's requirements: ${text}`;
+        setPendingBuild(null);
+
+        const res = await fetch("/api/ai/generate-circuit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ description: enriched }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        if (data.circuit) {
+          setCircuit(data.circuit);
+          setMessages((m) => [
+            ...m,
+            {
+              role: "assistant",
+              content: `Circuit generated! I've placed it on the canvas. ${data.explanation ?? ""}`,
+            },
+          ]);
+        }
+        setLoading(false);
+        return;
+      }
+
+      // ── Detect intent ──
       const isGenerateIntent =
-        /build|create|make|generate|design|construct/i.test(text);
+        /build|create|make|generate|design|construct|draw|implement|wire/i.test(text);
       const isExplainIntent = /explain|what does|describe|how does/i.test(text);
-      const isDiagnoseIntent = /why|debug|broken|wrong|not work|fix/i.test(text);
 
+      // ── Phase 1: Build intent → ask 3 clarifying questions first ──
+      if (isGenerateIntent && !isExplainIntent) {
+        setPendingBuild(text);
+
+        const res = await fetch("/api/ai/tutor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            circuit,
+            question: `The user wants to build: "${text}". Before building, ask exactly 3 short clarifying questions to understand their exact requirements. Focus on: (1) what specific outputs/functionality they need, (2) which implementation approach or gate types they prefer, (3) any constraints like gate count or specific design style. Number them 1-3. Be concise and direct.`,
+            mode: "build",
+          }),
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        setMessages((m) => [
+          ...m,
+          { role: "assistant", content: data.reply ?? "What would you like me to clarify?" },
+        ]);
+        setLoading(false);
+        return;
+      }
+
+      // ── Normal flow: explain or tutor ──
       let endpoint = "/api/ai/tutor";
-      if (isGenerateIntent && !isExplainIntent) endpoint = "/api/ai/generate-circuit";
-      else if (isExplainIntent) endpoint = "/api/ai/explain-circuit";
-
-      const body =
-        endpoint === "/api/ai/generate-circuit"
-          ? { description: text }
-          : { circuit, question: text };
+      if (isExplainIntent) endpoint = "/api/ai/explain-circuit";
 
       const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ circuit, question: text, mode }),
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
 
-      if (endpoint === "/api/ai/generate-circuit" && data.circuit) {
-        setCircuit(data.circuit);
-        setMessages((m) => [
-          ...m,
-          {
-            role: "assistant",
-            content: `Circuit generated! I've placed it on the canvas. ${data.explanation ?? ""}`,
-          },
-        ]);
-      } else {
-        setMessages((m) => [
-          ...m,
-          { role: "assistant", content: data.reply ?? data.explanation ?? "Done!" },
-        ]);
-      }
+      setMessages((m) => [
+        ...m,
+        { role: "assistant", content: data.reply ?? data.explanation ?? "Done!" },
+      ]);
     } catch (err) {
+      setPendingBuild(null);
       setMessages((m) => [
         ...m,
         {
           role: "assistant",
-          content: "Sorry, something went wrong. Make sure `ANTHROPIC_API_KEY` is set.",
+          content: "Sorry, something went wrong. Make sure `GEMINI_API_KEY` is set in .env.local and restart the dev server.",
         },
       ]);
     } finally {
@@ -93,13 +136,27 @@ export default function AIChat() {
   };
 
   return (
-    <div className="flex flex-col h-full" style={{ background: "#0A0A1A" }}>
-      {/* Header */}
-      <div
-        className="px-3 py-2 border-b text-xs font-bold tracking-widest uppercase"
-        style={{ borderColor: "#1E1E3A", color: "#8888AA", background: "#12122A" }}
-      >
-        AI Tutor
+    <div className="flex flex-col h-full bg-background">
+      {/* Header with mode toggle */}
+      <div className="px-3 py-2 border-b border-zinc-800 bg-zinc-900 flex items-center justify-between">
+        <span className="text-xs font-bold tracking-widest uppercase text-zinc-400">
+          AI {mode === "tutor" ? "Tutor" : "Build"}
+        </span>
+        <div className="flex rounded-md bg-zinc-800 p-0.5">
+          {(["tutor", "build"] as const).map((m) => (
+            <button
+              key={m}
+              onClick={() => setMode(m)}
+              className={`px-2.5 py-0.5 rounded text-[11px] font-medium transition-all ${
+                mode === m
+                  ? "bg-zinc-600 text-zinc-100"
+                  : "text-zinc-500 hover:text-zinc-300"
+              }`}
+            >
+              {m === "tutor" ? "Tutor" : "Build"}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Messages */}
@@ -110,12 +167,11 @@ export default function AIChat() {
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className="max-w-[85%] px-3 py-2 rounded-lg text-sm leading-relaxed"
-              style={{
-                background: msg.role === "user" ? "#1E1E3A" : "#12122A",
-                color: "#E8E8F0",
-                border: msg.role === "assistant" ? "1px solid #1E1E3A" : "none",
-              }}
+              className={`max-w-[85%] px-3 py-2 rounded-lg text-sm leading-relaxed text-zinc-50 ${
+                msg.role === "user"
+                  ? "bg-zinc-800"
+                  : "bg-zinc-900 border border-zinc-800"
+              }`}
               dangerouslySetInnerHTML={{
                 __html: msg.content
                   .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
@@ -126,11 +182,8 @@ export default function AIChat() {
         ))}
         {loading && (
           <div className="flex justify-start">
-            <div
-              className="px-3 py-2 rounded-lg text-sm"
-              style={{ background: "#12122A", color: "#8888AA", border: "1px solid #1E1E3A" }}
-            >
-              <span className="animate-pulse">Thinking…</span>
+            <div className="px-3 py-2 rounded-lg text-sm bg-zinc-900 text-zinc-400 border border-zinc-800">
+              <span className="animate-pulse">Thinking...</span>
             </div>
           </div>
         )}
@@ -138,12 +191,11 @@ export default function AIChat() {
       </div>
 
       {/* Suggestions */}
-      <div className="px-3 py-2 flex flex-wrap gap-1 border-t" style={{ borderColor: "#1E1E3A" }}>
+      <div className="px-3 py-2 flex flex-wrap gap-1 border-t border-zinc-800">
         {SUGGESTIONS.map((s) => (
           <button
             key={s}
-            className="text-xs px-2 py-1 rounded transition-all"
-            style={{ background: "#1E1E3A", color: "#8888AA" }}
+            className="text-xs px-2 py-1 rounded-md bg-zinc-800 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700 transition-all"
             onClick={() => sendMessage(s)}
           >
             {s}
@@ -152,25 +204,21 @@ export default function AIChat() {
       </div>
 
       {/* Input */}
-      <div
-        className="flex gap-2 p-3 border-t"
-        style={{ borderColor: "#1E1E3A", background: "#12122A" }}
-      >
+      <div className="flex gap-2 p-3 border-t border-zinc-800 bg-zinc-900">
         <input
-          className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded border"
-          style={{ borderColor: "#1E1E3A", color: "#E8E8F0" }}
-          placeholder="Ask anything…"
+          className="flex-1 bg-transparent outline-none text-sm px-2 py-1 rounded-lg border border-zinc-800 text-zinc-50 placeholder:text-zinc-500 focus:ring-2 focus:ring-primary/50"
+          placeholder="Ask anything..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
           disabled={loading}
         />
         <button
-          className="px-3 py-1 rounded text-sm font-medium transition-all"
-          style={{
-            background: loading ? "#1E1E3A" : "#58C4DD",
-            color: loading ? "#4A4A5A" : "#0A0A1A",
-          }}
+          className={`px-3 py-1 rounded-lg text-sm font-medium transition-all ${
+            loading
+              ? "bg-zinc-800 text-zinc-500"
+              : "bg-primary text-primary-foreground hover:bg-green-400"
+          }`}
           onClick={() => sendMessage(input)}
           disabled={loading}
         >

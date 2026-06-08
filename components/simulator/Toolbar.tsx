@@ -38,7 +38,14 @@ const TOOLS: ToolButton[] = [
   },
 ];
 
-export default function Toolbar() {
+interface ToolbarProps {
+  showLabels?: boolean;
+  onToggleLabels?: () => void;
+  traceActive?: boolean;
+  onToggleTrace?: () => void;
+}
+
+export default function Toolbar({ showLabels = false, onToggleLabels, traceActive = false, onToggleTrace }: ToolbarProps) {
   const {
     selectedTool,
     setSelectedTool,
@@ -56,62 +63,82 @@ export default function Toolbar() {
     if (tool !== "wire") setWireInProgress(null);
   };
 
-  const btnBase =
-    "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded text-xs font-medium transition-all";
+  const btn =
+    "flex items-center justify-center w-8 h-8 rounded-lg transition-all border";
 
   return (
-    <div
-      className="flex items-center gap-1 px-3 py-2 border-b"
-      style={{ background: "#12122A", borderColor: "#1E1E3A" }}
-    >
+    <div className="absolute top-3 left-3 z-10 flex flex-col gap-1 p-1.5 bg-zinc-900/90 backdrop-blur-xl border border-white/[0.06] rounded-xl shadow-lg">
       {TOOLS.map(({ tool, label, icon }) => {
         const active = selectedTool === tool;
         return (
           <button
             key={tool}
             title={label}
-            className={btnBase}
-            style={{
-              background: active ? "#1E1E3A" : "transparent",
-              color: active ? "#58C4DD" : "#8888AA",
-              border: active ? "1px solid #58C4DD" : "1px solid transparent",
-            }}
+            className={`${btn} ${
+              active
+                ? "bg-zinc-700 text-primary border-primary"
+                : "text-zinc-400 border-transparent hover:text-zinc-100 hover:bg-zinc-800/80"
+            }`}
             onClick={() => handleTool(tool)}
           >
             {icon}
-            <span className="hidden sm:block" style={{ fontSize: "10px" }}>
-              {tool.charAt(0).toUpperCase() + tool.slice(1)}
-            </span>
           </button>
         );
       })}
 
-      <div className="w-px h-8 mx-2" style={{ background: "#1E1E3A" }} />
+      <div className="h-px mx-1 bg-white/[0.06]" />
 
-      {/* Undo / Redo */}
       <button
         title="Undo (Ctrl+Z)"
-        className={btnBase}
-        style={{ color: undoStack.length > 0 ? "#8888AA" : "#3A3A5A" }}
+        className={`${btn} border-transparent ${undoStack.length > 0 ? "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80" : "text-zinc-700"}`}
         onClick={undo}
         disabled={undoStack.length === 0}
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
           <path d="M4 4L1 7l3 3V8h6a3 3 0 010 6H6v-2h4a1 1 0 000-2H4V8L1 7l3-3z" />
         </svg>
-        <span className="hidden sm:block" style={{ fontSize: "10px" }}>Undo</span>
       </button>
       <button
         title="Redo (Ctrl+Shift+Z)"
-        className={btnBase}
-        style={{ color: redoStack.length > 0 ? "#8888AA" : "#3A3A5A" }}
+        className={`${btn} border-transparent ${redoStack.length > 0 ? "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/80" : "text-zinc-700"}`}
         onClick={redo}
         disabled={redoStack.length === 0}
       >
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
           <path d="M12 4l3 3-3 3V8H6a3 3 0 000 6h4v-2H6a1 1 0 010-2h6V8l3-1-3-3z" />
         </svg>
-        <span className="hidden sm:block" style={{ fontSize: "10px" }}>Redo</span>
+      </button>
+
+      <div className="h-px mx-1 bg-white/[0.06]" />
+
+      <button
+        title="Show Wire Values"
+        className={`${btn} ${
+          showLabels
+            ? "text-primary border-primary bg-zinc-700"
+            : "text-zinc-400 border-transparent hover:text-zinc-100 hover:bg-zinc-800/80"
+        }`}
+        onClick={onToggleLabels}
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 3C4.36 3 1.26 5.28 0 8.5c1.26 3.22 4.36 5.5 8 5.5s6.74-2.28 8-5.5C14.74 5.28 11.64 3 8 3zm0 9.17a3.67 3.67 0 110-7.34 3.67 3.67 0 010 7.34zM8 5.5a3 3 0 100 6 3 3 0 000-6z"/>
+        </svg>
+      </button>
+
+      <div className="h-px mx-1 bg-white/[0.06]" />
+
+      <button
+        title="Step-Through Mode"
+        className={`${btn} ${
+          traceActive
+            ? "text-amber-400 border-amber-400 bg-zinc-700"
+            : "text-zinc-400 border-transparent hover:text-zinc-100 hover:bg-zinc-800/80"
+        }`}
+        onClick={onToggleTrace}
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M9 1L3 9h4l-1 6 6-8H8l1-6z" />
+        </svg>
       </button>
     </div>
   );

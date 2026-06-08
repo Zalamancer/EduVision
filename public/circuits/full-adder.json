@@ -1,0 +1,30 @@
+{
+  "id": "circuit-full-adder",
+  "name": "Full Adder",
+  "components": [
+    { "id": "fa-inA", "type": "INPUT", "x": 40, "y": 60, "rotation": 0, "label": "A", "value": false },
+    { "id": "fa-inB", "type": "INPUT", "x": 40, "y": 160, "rotation": 0, "label": "B", "value": false },
+    { "id": "fa-inCin", "type": "INPUT", "x": 40, "y": 280, "rotation": 0, "label": "Cin", "value": false },
+    { "id": "fa-xor1", "type": "XOR", "x": 200, "y": 80, "rotation": 0, "label": "XOR1" },
+    { "id": "fa-xor2", "type": "XOR", "x": 360, "y": 80, "rotation": 0, "label": "XOR2" },
+    { "id": "fa-and1", "type": "AND", "x": 200, "y": 220, "rotation": 0, "label": "AND1" },
+    { "id": "fa-and2", "type": "AND", "x": 360, "y": 220, "rotation": 0, "label": "AND2" },
+    { "id": "fa-or", "type": "OR", "x": 500, "y": 220, "rotation": 0, "label": "OR" },
+    { "id": "fa-outSum", "type": "OUTPUT", "x": 560, "y": 80, "rotation": 0, "label": "Sum" },
+    { "id": "fa-outCout", "type": "OUTPUT", "x": 620, "y": 220, "rotation": 0, "label": "Cout" }
+  ],
+  "wires": [
+    { "id": "fa-w1", "from": { "componentId": "fa-inA", "pinIndex": 0 }, "to": { "componentId": "fa-xor1", "pinIndex": 0 } },
+    { "id": "fa-w2", "from": { "componentId": "fa-inB", "pinIndex": 0 }, "to": { "componentId": "fa-xor1", "pinIndex": 1 } },
+    { "id": "fa-w3", "from": { "componentId": "fa-xor1", "pinIndex": 0 }, "to": { "componentId": "fa-xor2", "pinIndex": 0 } },
+    { "id": "fa-w4", "from": { "componentId": "fa-inCin", "pinIndex": 0 }, "to": { "componentId": "fa-xor2", "pinIndex": 1 } },
+    { "id": "fa-w5", "from": { "componentId": "fa-inA", "pinIndex": 0 }, "to": { "componentId": "fa-and1", "pinIndex": 0 } },
+    { "id": "fa-w6", "from": { "componentId": "fa-inB", "pinIndex": 0 }, "to": { "componentId": "fa-and1", "pinIndex": 1 } },
+    { "id": "fa-w7", "from": { "componentId": "fa-xor1", "pinIndex": 0 }, "to": { "componentId": "fa-and2", "pinIndex": 0 } },
+    { "id": "fa-w8", "from": { "componentId": "fa-inCin", "pinIndex": 0 }, "to": { "componentId": "fa-and2", "pinIndex": 1 } },
+    { "id": "fa-w9", "from": { "componentId": "fa-and1", "pinIndex": 0 }, "to": { "componentId": "fa-or", "pinIndex": 0 } },
+    { "id": "fa-w10", "from": { "componentId": "fa-and2", "pinIndex": 0 }, "to": { "componentId": "fa-or", "pinIndex": 1 } },
+    { "id": "fa-w11", "from": { "componentId": "fa-xor2", "pinIndex": 0 }, "to": { "componentId": "fa-outSum", "pinIndex": 0 } },
+    { "id": "fa-w12", "from": { "componentId": "fa-or", "pinIndex": 0 }, "to": { "componentId": "fa-outCout", "pinIndex": 0 } }
+  ]
+}

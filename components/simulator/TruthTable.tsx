@@ -26,7 +26,7 @@ export default function TruthTable() {
 
   if (!truthTable) {
     return (
-      <div className="flex items-center justify-center h-full text-sm" style={{ color: "#4A4A5A" }}>
+      <div className="flex items-center justify-center h-full text-sm text-zinc-500">
         Add at least 1 INPUT and 1 OUTPUT to see the truth table.
       </div>
     );
@@ -40,18 +40,16 @@ export default function TruthTable() {
             {truthTable.inputLabels.map((l) => (
               <th
                 key={l}
-                className="px-3 py-1 text-center border-b border-r"
-                style={{ borderColor: "#1E1E3A", color: "#83C167" }}
+                className="px-3 py-1 text-center border-b border-r border-zinc-800 text-green-400"
               >
                 {l}
               </th>
             ))}
-            <th className="px-2" style={{ borderColor: "#1E1E3A", background: "transparent" }} />
+            <th className="px-2 border-zinc-800" />
             {truthTable.outputLabels.map((l) => (
               <th
                 key={l}
-                className="px-3 py-1 text-center border-b border-l"
-                style={{ borderColor: "#1E1E3A", color: "#FC6255" }}
+                className="px-3 py-1 text-center border-b border-l border-zinc-800 text-red-400"
               >
                 {l}
               </th>
@@ -64,32 +62,25 @@ export default function TruthTable() {
             return (
               <tr
                 key={i}
-                style={{
-                  background: isActive ? "#1a2e1a" : "transparent",
-                  outline: isActive ? "1px solid #83C167" : "none",
-                }}
+                className={isActive ? "bg-green-950/50 outline outline-1 outline-green-500" : ""}
               >
                 {truthTable.inputLabels.map((l) => (
                   <td
                     key={l}
-                    className="px-3 py-0.5 text-center border-r"
-                    style={{
-                      borderColor: "#1E1E3A",
-                      color: row.inputs[l] ? "#83C167" : "#8888AA",
-                    }}
+                    className={`px-3 py-0.5 text-center border-r border-zinc-800 ${
+                      row.inputs[l] ? "text-green-400" : "text-zinc-400"
+                    }`}
                   >
                     {row.inputs[l] ? "1" : "0"}
                   </td>
                 ))}
-                <td className="px-1" style={{ color: "#4A4A5A" }}>│</td>
+                <td className="px-1 text-zinc-600">|</td>
                 {truthTable.outputLabels.map((l) => (
                   <td
                     key={l}
-                    className="px-3 py-0.5 text-center border-l"
-                    style={{
-                      borderColor: "#1E1E3A",
-                      color: row.outputs[l] ? "#83C167" : "#8888AA",
-                    }}
+                    className={`px-3 py-0.5 text-center border-l border-zinc-800 ${
+                      row.outputs[l] ? "text-green-400" : "text-zinc-400"
+                    }`}
                   >
                     {row.outputs[l] ? "1" : "0"}
                   </td>

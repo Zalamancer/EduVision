@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { Circuit, Component, Wire, SignalState, GateType } from "@/lib/sim-engine/types";
+import { Circuit, Component, Wire, SignalState, GateType, BusGroup } from "@/lib/sim-engine/types";
 import { propagate } from "@/lib/sim-engine/propagator";
 import { nanoid } from "nanoid";
 
@@ -25,6 +25,7 @@ interface CircuitState {
   wireInProgress: WireInProgress | null;
   undoStack: CircuitCommand[];
   redoStack: CircuitCommand[];
+  busGroups: BusGroup[];
 
   // Actions
   setCircuit: (circuit: Circuit) => void;
@@ -42,6 +43,9 @@ interface CircuitState {
   undo: () => void;
   redo: () => void;
   clearCircuit: () => void;
+  addBusGroup: (group: BusGroup) => void;
+  removeBusGroup: (id: string) => void;
+  setBusValue: (busId: string, binaryString: string) => void;
 }
 
 function emptyCircuit(): Circuit {
@@ -62,6 +66,7 @@ export const useCircuitStore = create<CircuitState>((set, get) => ({
   wireInProgress: null,
   undoStack: [],
   redoStack: [],
+  busGroups: [],
 
   setCircuit: (circuit) => {
     set({ circuit, undoStack: [], redoStack: [] });
@@ -234,6 +239,32 @@ export const useCircuitStore = create<CircuitState>((set, get) => ({
   },
 
   clearCircuit: () => {
-    set({ circuit: emptyCircuit(), signalState: {}, undoStack: [], redoStack: [] });
+    set({ circuit: emptyCircuit(), signalState: {}, undoStack: [], redoStack: [], busGroups: [] });
+  },
+
+  addBusGroup: (group) => {
+    set((s) => ({ busGroups: [...s.busGroups, group] }));
+  },
+
+  removeBusGroup: (id) => {
+    set((s) => ({ busGroups: s.busGroups.filter((bg) => bg.id !== id) }));
+  },
+
+  setBusValue: (busId, binaryString) => {
+    const state = get();
+    const bus = state.busGroups.find((bg) => bg.id === busId);
+    if (!bus) return;
+    // Pad or trim binaryString to match bitWidth
+    const padded = binaryString.padStart(bus.bitWidth, "0").slice(-bus.bitWidth);
+    // Set each INPUT component in the bus to match the binary string (MSB-first)
+    const updatedComponents = state.circuit.components.map((c) => {
+      const idx = bus.componentIds.indexOf(c.id);
+      if (idx === -1 || c.type !== "INPUT") return c;
+      return { ...c, value: padded[idx] === "1" };
+    });
+    set((s) => ({
+      circuit: { ...s.circuit, components: updatedComponents },
+    }));
+    get().updateSignals();
   },
 }));

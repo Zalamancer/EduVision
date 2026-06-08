@@ -1,0 +1,24 @@
+{
+  "id": "circuit-2to1-mux",
+  "name": "2-to-1 Multiplexer",
+  "components": [
+    { "id": "mux-inD0", "type": "INPUT", "x": 40, "y": 60, "rotation": 0, "label": "D0", "value": false },
+    { "id": "mux-inD1", "type": "INPUT", "x": 40, "y": 180, "rotation": 0, "label": "D1", "value": false },
+    { "id": "mux-inS", "type": "INPUT", "x": 40, "y": 300, "rotation": 0, "label": "S", "value": false },
+    { "id": "mux-not", "type": "NOT", "x": 180, "y": 300, "rotation": 0, "label": "NOT" },
+    { "id": "mux-and1", "type": "AND", "x": 300, "y": 60, "rotation": 0, "label": "AND1" },
+    { "id": "mux-and2", "type": "AND", "x": 300, "y": 180, "rotation": 0, "label": "AND2" },
+    { "id": "mux-or", "type": "OR", "x": 440, "y": 120, "rotation": 0, "label": "OR" },
+    { "id": "mux-outY", "type": "OUTPUT", "x": 580, "y": 120, "rotation": 0, "label": "Y" }
+  ],
+  "wires": [
+    { "id": "mux-w1", "from": { "componentId": "mux-inS", "pinIndex": 0 }, "to": { "componentId": "mux-not", "pinIndex": 0 } },
+    { "id": "mux-w2", "from": { "componentId": "mux-inD0", "pinIndex": 0 }, "to": { "componentId": "mux-and1", "pinIndex": 0 } },
+    { "id": "mux-w3", "from": { "componentId": "mux-not", "pinIndex": 0 }, "to": { "componentId": "mux-and1", "pinIndex": 1 } },
+    { "id": "mux-w4", "from": { "componentId": "mux-inD1", "pinIndex": 0 }, "to": { "componentId": "mux-and2", "pinIndex": 0 } },
+    { "id": "mux-w5", "from": { "componentId": "mux-inS", "pinIndex": 0 }, "to": { "componentId": "mux-and2", "pinIndex": 1 } },
+    { "id": "mux-w6", "from": { "componentId": "mux-and1", "pinIndex": 0 }, "to": { "componentId": "mux-or", "pinIndex": 0 } },
+    { "id": "mux-w7", "from": { "componentId": "mux-and2", "pinIndex": 0 }, "to": { "componentId": "mux-or", "pinIndex": 1 } },
+    { "id": "mux-w8", "from": { "componentId": "mux-or", "pinIndex": 0 }, "to": { "componentId": "mux-outY", "pinIndex": 0 } }
+  ]
+}

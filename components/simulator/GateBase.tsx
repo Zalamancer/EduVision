@@ -2,6 +2,36 @@
 
 import { GateType, PIN_POSITIONS } from "@/lib/sim-engine";
 
+/** Non-standard bounding boxes — entries only needed for sizes != default 80x60 */
+const BOUNDING_BOX: Partial<Record<GateType, { w: number; h: number }>> = {
+  // Plexers
+  MUX_4TO1:          { w: 100, h: 100 },
+  MUX_8TO1:          { w: 100, h: 180 },
+  DEMUX_1TO4:        { w: 100, h: 100 },
+  DECODER_2TO4:      { w: 100, h: 80 },
+  PRIORITY_ENCODER:  { w: 100, h: 100 },
+  // Arithmetic
+  COMPARATOR:        { w: 80, h: 80 },
+  // Memory
+  JK_FLIP_FLOP:      { w: 80, h: 70 },
+  SR_FLIP_FLOP:      { w: 80, h: 70 },
+  REGISTER:          { w: 80, h: 70 },
+  SHIFT_REGISTER:    { w: 100, h: 80 },
+  // Wiring
+  CLOCK:             { w: 60, h: 60 },
+  CONSTANT:          { w: 60, h: 40 },
+  POWER:             { w: 40, h: 40 },
+  GROUND:            { w: 40, h: 40 },
+  PROBE:             { w: 40, h: 40 },
+  TUNNEL:            { w: 60, h: 30 },
+  SPLITTER:          { w: 40, h: 40 },
+  // I/O
+  BUTTON:            { w: 60, h: 60 },
+  SEVEN_SEGMENT:     { w: 60, h: 80 },
+  HEX_DISPLAY:       { w: 60, h: 60 },
+  LED_MATRIX:        { w: 60, h: 60 },
+};
+
 interface GateBaseProps {
   id: string;
   type: GateType;
@@ -13,14 +43,19 @@ interface GateBaseProps {
   onSelect: (id: string, e: React.MouseEvent) => void;
   onInputPinClick: (compId: string, pinIndex: number) => void;
   onOutputPinClick: (compId: string, pinIndex: number) => void;
-  children: React.ReactNode; // the gate shape SVG
+  onPinDragStart: (compId: string, e: React.MouseEvent) => void;
+  onInputPinDragStart?: (compId: string, pinIndex: number) => void;
+  onInputPinMouseUp?: (compId: string, pinIndex: number) => void;
+  children: React.ReactNode;
+  highlighted?: boolean;
+  dimmed?: boolean;
 }
 
 const PIN_RADIUS = 5;
-const HIGH = "#83C167";
-const LOW = "#4A4A5A";
-const BORDER = "#1E1E3A";
-const PRIMARY = "#58C4DD";
+const HIGH = "var(--signal-high)";
+const LOW = "var(--gate-low)";
+const BORDER = "var(--gate-border)";
+const PRIMARY = "var(--signal-high)";
 
 export default function GateBase({
   id,
@@ -33,35 +68,45 @@ export default function GateBase({
   onSelect,
   onInputPinClick,
   onOutputPinClick,
+  onPinDragStart,
+  onInputPinDragStart,
+  onInputPinMouseUp,
   children,
+  highlighted,
+  dimmed,
 }: GateBaseProps) {
   const pins = PIN_POSITIONS[type];
+  const box = BOUNDING_BOX[type] ?? { w: 80, h: 60 };
 
   return (
     <g
       transform={`translate(${x},${y})`}
       className="gate-svg cursor-pointer"
       onClick={(e) => onSelect(id, e)}
+      opacity={dimmed ? 0.35 : 1}
     >
-      {/* Selection ring */}
-      {selected && (
+      {/* Trace highlight glow ring */}
+      {highlighted && (
         <rect
-          x="-4"
-          y="-4"
-          width="88"
-          height="68"
-          rx="6"
+          x="-6"
+          y="-6"
+          width={box.w + 12}
+          height={box.h + 12}
+          rx="8"
           fill="none"
-          stroke={PRIMARY}
+          stroke="var(--signal-high)"
           strokeWidth="2"
-          strokeDasharray="4 2"
+          opacity="0.6"
+          style={{ animation: "trace-pulse 1.5s ease-in-out infinite" }}
         />
       )}
 
-      {/* Gate body */}
-      {children}
+      {/* Gate body — selected gates get white/black stroke instead of green */}
+      <g style={selected ? { '--signal-high': 'var(--gate-selected-stroke)' } as React.CSSProperties : undefined}>
+        {children}
+      </g>
 
-      {/* Input pins */}
+      {/* Input pins — mouseDown starts drag tracking, click completes wire */}
       {pins.inputs.map(([px, py], i) => (
         <circle
           key={`in-${i}`}
@@ -71,10 +116,18 @@ export default function GateBase({
           fill={BORDER}
           stroke={LOW}
           strokeWidth="1.5"
-          className="cursor-crosshair"
+          className="cursor-pointer"
+          onMouseDown={(e) => {
+            e.stopPropagation();
+            onInputPinDragStart?.(id, i);
+          }}
           onClick={(e) => {
             e.stopPropagation();
             onInputPinClick(id, i);
+          }}
+          onMouseUp={(e) => {
+            e.stopPropagation();
+            onInputPinMouseUp?.(id, i);
           }}
         />
       ))}
@@ -91,8 +144,8 @@ export default function GateBase({
             fill={isHigh ? HIGH : BORDER}
             stroke={isHigh ? HIGH : LOW}
             strokeWidth="1.5"
-            className="cursor-crosshair"
-            onClick={(e) => {
+            className="cursor-pointer"
+            onMouseDown={(e) => {
               e.stopPropagation();
               onOutputPinClick(id, i);
             }}
@@ -102,10 +155,10 @@ export default function GateBase({
 
       {/* Label */}
       <text
-        x="40"
-        y="72"
+        x={box.w / 2}
+        y={box.h + 12}
         textAnchor="middle"
-        fill="#8888AA"
+        fill="var(--gate-label)"
         fontSize="9"
         fontFamily="monospace"
       >

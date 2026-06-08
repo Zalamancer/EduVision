@@ -65,15 +65,12 @@ export default function Player({ src, title }: PlayerProps) {
 
   if (!src) {
     return (
-      <div
-        className="aspect-video flex flex-col items-center justify-center rounded-xl"
-        style={{ background: "#12122A", border: "1px solid #1E1E3A" }}
-      >
+      <div className="aspect-video flex flex-col items-center justify-center rounded-xl glass-card">
         <div className="text-4xl mb-3">🎬</div>
-        <p className="text-sm font-medium" style={{ color: "#8888AA" }}>
+        <p className="text-sm font-medium text-zinc-400">
           Video coming soon
         </p>
-        <p className="text-xs mt-1" style={{ color: "#4A4A5A" }}>
+        <p className="text-xs mt-1 text-zinc-500">
           {title}
         </p>
       </div>
@@ -81,39 +78,34 @@ export default function Player({ src, title }: PlayerProps) {
   }
 
   return (
-    <div ref={containerRef} className="relative rounded-xl overflow-hidden group" style={{ background: "#000" }}>
+    <div ref={containerRef} className="relative rounded-xl overflow-hidden group bg-black">
       <video
         ref={videoRef}
         src={src}
-        className="w-full aspect-video"
+        className="w-full aspect-video cursor-pointer"
         onClick={toggle}
-        style={{ cursor: "pointer" }}
       />
 
       {/* Controls overlay */}
       <div
         className="absolute bottom-0 left-0 right-0 px-3 py-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
-        style={{ background: "linear-gradient(transparent, #00000099)" }}
+        style={{ background: "linear-gradient(transparent, rgba(0,0,0,0.6))" }}
       >
         {/* Progress bar */}
         <div
           ref={progressRef}
-          className="h-1 rounded-full cursor-pointer"
-          style={{ background: "#1E1E3A" }}
+          className="h-1 rounded-full cursor-pointer bg-zinc-800"
           onClick={seek}
         >
           <div
-            className="h-full rounded-full"
-            style={{
-              width: `${duration ? (currentTime / duration) * 100 : 0}%`,
-              background: "#58C4DD",
-            }}
+            className="h-full rounded-full bg-primary transition-all"
+            style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
           />
         </div>
 
         {/* Buttons */}
-        <div className="flex items-center gap-3 text-xs" style={{ color: "#E8E8F0" }}>
-          <button onClick={toggle} style={{ color: "#58C4DD" }}>
+        <div className="flex items-center gap-3 text-xs text-zinc-50">
+          <button onClick={toggle} className="text-primary">
             {playing ? (
               <svg width="18" height="18" viewBox="0 0 18 18" fill="currentColor">
                 <rect x="4" y="2" width="4" height="14" rx="1" />
@@ -126,16 +118,16 @@ export default function Player({ src, title }: PlayerProps) {
             )}
           </button>
 
-          <span className="font-mono" style={{ color: "#8888AA" }}>
+          <span className="font-mono text-zinc-400">
             {fmt(currentTime)} / {fmt(duration)}
           </span>
 
-          <button onClick={changeSpeed} className="font-mono font-bold" style={{ color: "#FFFF00" }}>
+          <button onClick={changeSpeed} className="font-mono font-bold text-amber-400">
             {speed}x
           </button>
 
           <div className="ml-auto">
-            <button onClick={toggleFullscreen} style={{ color: "#8888AA" }}>
+            <button onClick={toggleFullscreen} className="text-zinc-400 hover:text-zinc-100 transition-colors">
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 {fullscreen ? (
                   <path d="M6 6V2H4v2H2v2h4zm4-4h-2v4h4V4h-2V2zm2 8h-2v2h-2v2h4v-4zM4 10H2v4h4v-2H4v-2z" />

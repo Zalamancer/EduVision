@@ -9,18 +9,21 @@ interface WireRendererProps {
   signalState: SignalState;
   selectedIds: string[];
   onWireClick: (wireId: string) => void;
-  /** In-progress wire: from pin to current mouse position */
+  showLabels?: boolean;
   inProgressWire?: {
     fromX: number;
     fromY: number;
     toX: number;
     toY: number;
   } | null;
+  highlightedWireIds?: string[];
+  fadingWireIds?: string[];
 }
 
-function bezierPath(x1: number, y1: number, x2: number, y2: number): string {
-  const cx = (x1 + x2) / 2;
-  return `M ${x1} ${y1} C ${cx} ${y1}, ${cx} ${y2}, ${x2} ${y2}`;
+/** Manhattan routing — straight horizontal/vertical segments with right-angle turns */
+function manhattanPath(x1: number, y1: number, x2: number, y2: number): string {
+  const midX = (x1 + x2) / 2;
+  return `M ${x1} ${y1} L ${midX} ${y1} L ${midX} ${y2} L ${x2} ${y2}`;
 }
 
 export default function WireRenderer({
@@ -29,8 +32,12 @@ export default function WireRenderer({
   signalState,
   selectedIds,
   onWireClick,
+  showLabels,
   inProgressWire,
+  highlightedWireIds,
+  fadingWireIds,
 }: WireRendererProps) {
+  const traceActive = highlightedWireIds != null && highlightedWireIds.length > 0;
   const compMap = new Map(circuit.components.map((c) => [c.id, c]));
 
   return (
@@ -46,14 +53,24 @@ export default function WireRenderer({
         const fromState = signalState[wire.from.componentId];
         const isHigh = fromState?.[wire.from.pinIndex] ?? false;
         const isSelected = selectedIds.includes(wire.id);
+        const isHighlighted = traceActive && highlightedWireIds!.includes(wire.id);
+        const isUnresolved = traceActive && !fromState;
 
-        const color = isHigh ? "#83C167" : "#4A4A5A";
+        const color = isUnresolved ? "var(--gate-label)" : isHigh ? "var(--signal-high)" : "var(--gate-low)";
+        const d = manhattanPath(x1, y1, x2, y2);
+
+        // In trace mode: highlighted wires are full opacity + thicker, others are dimmed
+        const wireOpacity = traceActive ? (isHighlighted ? 1 : 0.25) : 1;
+        const wireWidth = isSelected ? 2.5 : isHighlighted ? 3 : 2;
+        const wireDash = isSelected ? "6 3" : isUnresolved ? "4 4" : undefined;
+
+        const isFading = fadingWireIds?.includes(wire.id);
 
         return (
-          <g key={wire.id}>
+          <g key={wire.id} opacity={wireOpacity} style={isFading ? { animation: "lesson-fade-in 0.6s ease-out both" } : undefined}>
             {/* Click target (wide invisible) */}
             <path
-              d={bezierPath(x1, y1, x2, y2)}
+              d={d}
               fill="none"
               stroke="transparent"
               strokeWidth="12"
@@ -62,31 +79,65 @@ export default function WireRenderer({
             />
             {/* Visible wire */}
             <path
-              d={bezierPath(x1, y1, x2, y2)}
+              d={d}
               fill="none"
-              stroke={isSelected ? "#58C4DD" : color}
-              strokeWidth={isSelected ? 2.5 : 2}
-              strokeDasharray={isSelected ? "6 3" : undefined}
+              stroke={isSelected ? "var(--signal-high)" : color}
+              strokeWidth={wireWidth}
+              strokeDasharray={wireDash}
+              strokeLinejoin="round"
             />
+            {showLabels && (() => {
+              const labelX = (x1 + x2) / 2;
+              const labelY = (y1 + y2) / 2;
+              return (
+                <g>
+                  <rect x={labelX - 8} y={labelY - 7} width={16} height={14} rx={4}
+                    fill={isHigh ? "var(--signal-high-bg)" : "var(--wire-label-bg)"} />
+                  <text x={labelX} y={labelY + 3.5} textAnchor="middle"
+                    fill={isHigh ? "var(--signal-high-text)" : "var(--gate-label)"}
+                    fontSize="9" fontFamily="monospace" fontWeight="bold">
+                    {isHigh ? "1" : "0"}
+                  </text>
+                </g>
+              );
+            })()}
           </g>
         );
       })}
 
       {/* In-progress wire */}
       {inProgressWire && (
-        <path
-          d={bezierPath(
-            inProgressWire.fromX,
-            inProgressWire.fromY,
-            inProgressWire.toX,
-            inProgressWire.toY
-          )}
-          fill="none"
-          stroke="#58C4DD"
-          strokeWidth="2"
-          strokeDasharray="5 3"
-          opacity="0.7"
-        />
+        <>
+          <path
+            d={manhattanPath(
+              inProgressWire.fromX,
+              inProgressWire.fromY,
+              inProgressWire.toX,
+              inProgressWire.toY
+            )}
+            fill="none"
+            stroke="var(--signal-high)"
+            strokeWidth="2"
+            strokeDasharray="5 3"
+            strokeLinejoin="round"
+            opacity="0.7"
+          />
+          {showLabels && (() => {
+            const labelX = (inProgressWire.fromX + inProgressWire.toX) / 2;
+            const labelY = (inProgressWire.fromY + inProgressWire.toY) / 2;
+            return (
+              <g opacity="0.7">
+                <rect x={labelX - 8} y={labelY - 7} width={16} height={14} rx={4}
+                  fill="var(--wire-label-bg)" />
+                <text x={labelX} y={labelY + 3.5} textAnchor="middle"
+                  fill="var(--gate-label)"
+                  fontSize="9" fontFamily="monospace" fontWeight="bold">
+                  ?
+                </text>
+              </g>
+            );
+          })()}
+        </>
       )}
     </g>
   );

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
+import ConditionalHeader from "@/components/layout/ConditionalHeader";
+import ConditionalMain from "@/components/layout/ConditionalMain";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
 });
 
@@ -34,13 +36,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased dark`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col" style={{ background: "#0A0A1A", color: "#E8E8F0" }}>
-        <TooltipProvider>
-          <Header />
-          <main className="flex-1 pt-14">{children}</main>
-        </TooltipProvider>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
+        <ThemeProvider>
+          <TooltipProvider>
+            <ConditionalHeader />
+            <ConditionalMain>{children}</ConditionalMain>
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

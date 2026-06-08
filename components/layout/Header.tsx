@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useThemeStore } from "@/lib/stores/theme-store";
 
 const NAV_LINKS = [
   { href: "/learn", label: "Learn" },
@@ -13,23 +14,18 @@ const NAV_LINKS = [
 export default function Header() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useThemeStore();
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 border-b"
-      style={{ background: "#0A0A1A", borderColor: "#1E1E3A" }}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 glass border-b border-white/[0.06]">
       <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          <span
-            className="w-7 h-7 rounded flex items-center justify-center text-xs font-black"
-            style={{ background: "#58C4DD", color: "#0A0A1A" }}
-          >
+          <span className="w-7 h-7 rounded-md flex items-center justify-center text-xs font-black bg-primary text-primary-foreground">
             EV
           </span>
-          <span style={{ color: "#E8E8F0" }}>
-            Edu<span style={{ color: "#58C4DD" }}>Vision</span>
+          <span className="text-zinc-50">
+            Edu<span className="text-primary">Vision</span>
           </span>
         </Link>
 
@@ -41,11 +37,11 @@ export default function Header() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-1.5 rounded text-sm font-medium transition-colors"
-                style={{
-                  color: active ? "#58C4DD" : "#8888AA",
-                  background: active ? "#1E1E3A" : "transparent",
-                }}
+                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  active
+                    ? "bg-zinc-800/80 text-zinc-50"
+                    : "text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/40"
+                }`}
               >
                 {link.label}
               </Link>
@@ -55,17 +51,31 @@ export default function Header() {
 
         {/* Auth buttons */}
         <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/50 transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === "dark" ? (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="4" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            )}
+          </button>
           <Link
             href="/login"
-            className="px-3 py-1.5 text-sm rounded transition-colors"
-            style={{ color: "#8888AA" }}
+            className="px-3 py-1.5 text-sm rounded-lg text-zinc-400 hover:text-zinc-100 transition-colors"
           >
             Sign in
           </Link>
           <Link
             href="/login?tab=signup"
-            className="px-3 py-1.5 text-sm rounded font-medium transition-colors"
-            style={{ background: "#58C4DD", color: "#0A0A1A" }}
+            className="px-4 py-1.5 text-sm rounded-lg font-medium bg-primary text-primary-foreground hover:bg-green-400 transition-colors"
           >
             Get started
           </Link>
@@ -73,9 +83,8 @@ export default function Header() {
 
         {/* Mobile hamburger */}
         <button
-          className="md:hidden p-2"
+          className="md:hidden p-2 text-zinc-300 hover:text-zinc-100"
           onClick={() => setMobileOpen(!mobileOpen)}
-          style={{ color: "#E8E8F0" }}
         >
           <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
             {mobileOpen ? (
@@ -97,25 +106,46 @@ export default function Header() {
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div
-          className="md:hidden border-t px-4 py-3 flex flex-col gap-2"
-          style={{ background: "#12122A", borderColor: "#1E1E3A" }}
-        >
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="py-2 text-sm font-medium"
-              style={{ color: "#E8E8F0" }}
-              onClick={() => setMobileOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="md:hidden border-t border-white/[0.06] px-4 py-3 flex flex-col gap-1 glass">
+          {NAV_LINKS.map((link) => {
+            const active = pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                  active ? "text-zinc-50 bg-zinc-800/60" : "text-zinc-400"
+                }`}
+                onClick={() => setMobileOpen(false)}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <button
+            onClick={toggleTheme}
+            className="py-2 px-3 rounded-lg text-sm font-medium text-zinc-400 flex items-center gap-2"
+          >
+            {theme === "dark" ? (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+                </svg>
+                Light mode
+              </>
+            ) : (
+              <>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                </svg>
+                Dark mode
+              </>
+            )}
+          </button>
           <Link
             href="/login"
-            className="py-2 text-sm"
-            style={{ color: "#58C4DD" }}
+            className="py-2 px-3 text-sm text-primary"
             onClick={() => setMobileOpen(false)}
           >
             Sign in / Get started

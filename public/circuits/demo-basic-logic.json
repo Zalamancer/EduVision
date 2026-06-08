@@ -1,0 +1,31 @@
+{
+  "id": "demo-basic-logic",
+  "name": "Basic Logic Demo",
+  "components": [
+    { "id": "a", "type": "INPUT", "x": 40, "y": 40, "rotation": 0, "label": "A", "value": true },
+    { "id": "b", "type": "INPUT", "x": 40, "y": 140, "rotation": 0, "label": "B", "value": false },
+    { "id": "c", "type": "INPUT", "x": 40, "y": 240, "rotation": 0, "label": "C", "value": true },
+
+    { "id": "and1", "type": "AND", "x": 220, "y": 60, "rotation": 0, "label": "AND1" },
+    { "id": "or1", "type": "OR", "x": 220, "y": 180, "rotation": 0, "label": "OR1" },
+    { "id": "not1", "type": "NOT", "x": 400, "y": 80, "rotation": 0, "label": "NOT1" },
+    { "id": "xor1", "type": "XOR", "x": 400, "y": 200, "rotation": 0, "label": "XOR1" },
+    { "id": "nand1", "type": "NAND", "x": 580, "y": 120, "rotation": 0, "label": "NAND1" },
+
+    { "id": "y1", "type": "OUTPUT", "x": 760, "y": 90, "rotation": 0, "label": "Y1" },
+    { "id": "y2", "type": "OUTPUT", "x": 760, "y": 190, "rotation": 0, "label": "Y2" }
+  ],
+  "wires": [
+    { "id": "w1", "from": { "componentId": "a", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 0 } },
+    { "id": "w2", "from": { "componentId": "b", "pinIndex": 0 }, "to": { "componentId": "and1", "pinIndex": 1 } },
+    { "id": "w3", "from": { "componentId": "b", "pinIndex": 0 }, "to": { "componentId": "or1", "pinIndex": 0 } },
+    { "id": "w4", "from": { "componentId": "c", "pinIndex": 0 }, "to": { "componentId": "or1", "pinIndex": 1 } },
+    { "id": "w5", "from": { "componentId": "and1", "pinIndex": 0 }, "to": { "componentId": "not1", "pinIndex": 0 } },
+    { "id": "w6", "from": { "componentId": "or1", "pinIndex": 0 }, "to": { "componentId": "xor1", "pinIndex": 1 } },
+    { "id": "w7", "from": { "componentId": "and1", "pinIndex": 0 }, "to": { "componentId": "xor1", "pinIndex": 0 } },
+    { "id": "w8", "from": { "componentId": "not1", "pinIndex": 0 }, "to": { "componentId": "nand1", "pinIndex": 0 } },
+    { "id": "w9", "from": { "componentId": "xor1", "pinIndex": 0 }, "to": { "componentId": "nand1", "pinIndex": 1 } },
+    { "id": "w10", "from": { "componentId": "nand1", "pinIndex": 0 }, "to": { "componentId": "y1", "pinIndex": 0 } },
+    { "id": "w11", "from": { "componentId": "xor1", "pinIndex": 0 }, "to": { "componentId": "y2", "pinIndex": 0 } }
+  ]
+}
